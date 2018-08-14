@@ -1,6 +1,6 @@
 #################### WEEK 1 ####################
 ########## LESSONS ##########
-setwd("D:/Software Engineering/Coding/DataScience/Course 3 - Getting and Cleaning Data/Course 3 - Lessons")
+setwd("D:/GitHub/datasciencespecialization/Course 3 - Getting and Cleaning Data/Course 3 - Lessons")
 
 ##### obtaining data motivation 
 # raw data -> processing data -> tidy data -> data analysis -> data communication
@@ -32,46 +32,44 @@ head(cameraData)
 #fileURL <- "https://data.baltimorecity.gov/api/views/dz54-2aru/rows.csv?accesstype=DOWNLOAD"
 #download.file(fileURL, destfile = "./data/cameras.xlsx", method = "curl")
 list.files("./data")
+#install.packages("xlsx")
 
-install.packages("xlsx")
 library(xlsx)
 cameraData <- read.xlsx("./data/cameras.xlsx", sheetIndex = 1, header = TRUE)
 head(cameraData)
 
 
 ##### read xml files 
-# install.packages("XML")
-library(xml)
+# 
+install.packages("XML")
+library(XML)
 fileURL <- "http://www.w3schools.com/xml/simple.xml"
-download.file(fileUrl, destfile = "./data/simple.xml")
+download.file(fileURL, destfile = "./data/simple.xml")
 doc <- xmlTreeParse("./data/simple.xml", useInternalNodes = TRUE)
 rootNode <- xmlRoot(doc)
-
 xmlName(rootNode)
 names(rootNode)
 rootNode[[1]][[2]]
+rootNode[[2]][[1]]
 
 xmlSApply(rootNode, xmlValue)
 
-xpathSApply(rootNode, "//name", xmlValue)
-xpathSApply(rootNode, "//price", xmlValue)
-
-# other xml file
-fileUrl <- "http://espn.go.com/nfl/team/_/name/bal/baltimore-ravens"
-download.file(fileUrl, destfile = "./data/scores.xml")
-doc <- htmlTreeParse("./data/scores.xml",useInternal=TRUE)
-scores <- xpathSApply(doc,"//li[@class='score']",xmlValue)
-teams <- xpathSApply(doc,"//li[@class='team-name']",xmlValue)
-scores
-teams
+name <- xpathSApply(rootNode, "//name", xmlValue)
+price <- xpathSApply(rootNode, "//price", xmlValue)
+class(name)
+class(price)
 
 
 ##### reading JSON
 library(jsonlite)
 jsonData <- fromJSON("https://api.github.com/users/jtleek/repos")
+# head(jsonData, n = 3)
+dim(jsonData)
 names(jsonData)
+dim(jsonData$owner)
 names(jsonData$owner)
 jsonData$owner$login
+
 
 # write data frames to JSON
 myjson <- toJSON(iris, pretty=TRUE)
