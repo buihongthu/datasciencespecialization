@@ -199,17 +199,17 @@ library(rhdf5)
 created = h5createFile("example.h5")
 created = h5createGroup("example.h5", "foo")
 created = h5createGroup("example.h5", "bar")
-created = h5createGroup("example.h5", "foo/foobaa")
+created = h5createGroup("example.h5", "foobaa")
 created
 h5ls("example.h5")
 
 #write to groups
-A = matrix(1:10,nr=5,nc=2)
-h5write(A, "example.h5","foo/A")
+matrix = matrix(1:10,nr=5,nc=2)
+h5write(matrix, "example.h5","foo/A")
 
 B = array(seq(0.1,2.0,by=0.1),dim=c(5,2,2))
 attr(B, "scale") <- "liter"
-h5write(B, "example.h5","foo/foobaa/B")
+h5write(B, "example.h5","bar/B")
 h5ls("example.h5")
 
 # write a dataset 
@@ -220,13 +220,17 @@ h5ls("example.h5")
 
 # read data
 readA = h5read("example.h5","foo/A")
-readB = h5read("example.h5","foo/foobaa/B")
+readB = h5read("example.h5","bar/B")
 readdf= h5read("example.h5","df")
-readA
+readA; readB; readdf
+
 
 # write and read chunk
 h5write(c(12,13,14),"example.h5","foo/A",index=list(1:3,1))
 h5read("example.h5","foo/A")
+
+# close connection to the file
+H5close()
 
 
 ##### reading from The Web
@@ -279,6 +283,31 @@ json2[1,1:4]
 # read.octave (Octave)
 # read.spss (SPSS)
 # read.xport (SAS)
+
+
+
+
+
+
+########## QUIZ ########## 
+fileURL <- "https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06pid.csv"
+download.file(fileURL, destfile = "./data/acs.csv", method = "curl")
+list.files("./data")
+
+acs <- read.table("./data/acs.csv", sep = ",", header = TRUE)
+dim(acs)
+
+
+# reading from The Web
+con = url("http://biostat.jhsph.edu/~jleek/contact.html")
+htmlCode = readLines(con)
+close(con)
+htmlCode
+nchar(htmlCode[10])
+nchar(htmlCode[20])
+nchar(htmlCode[30])
+nchar(htmlCode[100])
+
 
 
 #################### WEEK 3 ####################
