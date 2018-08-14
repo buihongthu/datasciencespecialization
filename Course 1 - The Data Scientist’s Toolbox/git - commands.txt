@@ -1,0 +1,47 @@
+### List all of the tree: 
+git ls-tree --full-name -r HEAD
+
+
+### Create a new repository in Github on the command line - we already have the local repository
+echo "# research" >> README.md
+git init  # come to local folder and type the command to create a new local repository & add use the Github Desktop to add local repository in the same time
+git add README.md  # Add one or more files to staging 
+git commit -m "first commit"  # Commit changes to head (but not yet to the remote repository)
+git remote add origin https://github.com/buihongthu/research.git  # need to create new repository in remote Github before 
+git push -u origin master
+
+
+### Push all of a repository
+git add -A 
+git commit -m "Your Message"
+git push -u origin
+
+
+### Push an existing repository from the command line
+git remote add origin https://github.com/buihongthu/research.git  # only the first time if there is no link between local and remote 
+git push -u origin master
+
+
+### Push the changes to Github
+git add "git - commands.txt"
+git commit -m "updated"
+git push -u origin 				# send those changes to your remote repository
+
+
+
+### Update local files to the newest stage of remote server
+git pull 
+
+### Remove big files
+git rebase -i origin/master
+git rm big-file.txt
+git commit --amend --allow-empty
+git rebase --continue
+git push origin master
+
+
+
+### Others
+git status  # List the files you've changed and those you still need to add or commit
+git remote -v  # List all currently configured remote repositories 
+git commit -a  # Commit any files you've added with git add, and also commit any files you've changed since then
