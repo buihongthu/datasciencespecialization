@@ -1,0 +1,31 @@
+##### datasets 
+table(dataset$field)  # categorial statistics
+dim(dataset)  # dimensions of dataframe 
+range(dataset$field) # give min and max
+head(select(chicago, city:dptp))  # select variables to show 
+
+
+# subsetting 
+may <- subset(airquality, Month == 5)
+
+# processing dataset 
+melt(allData, id = c("subject", "activity"))  # keep variables subject and activity, all of other variable and their values transfer to only two new variables (variable, value) 
+
+
+##### base plotting system 
+names(par())
+par()$pin 
+par("lty")
+
+# can add text, title, points, lines to an existing plot
+
+# boxplot
+boxplot(Ozone~Month, airquality, xlab="Month", ylab="Ozone (ppb)",col.axis="blue",col.lab="red")
+title (main = "Ozone and Wind in New York City")
+
+# scatterplot
+with(airquality, plot(Wind, Ozone))
+
+
+
+##### ggplot2 
