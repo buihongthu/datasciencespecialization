@@ -310,41 +310,54 @@ nchar(htmlCode[100])
 
 
 
+
+
+
+
+
 #################### WEEK 3 ####################
 ########## LESSONS ##########
 ##### subseting and sorting
 ## subsetting 
 set.seed(13435)
-X <- data.frame("var1"=sample(1:5),"var2"=sample(6:10),"var3"=sample(11:15))
-X <- X[sample(1:5),]; X$var2[c(1,3)] = NA
-X
-X[,1]
-X[,"var1"]
-X[1:2,"var2"]
-X[(X$var1 <= 3 & X$var3 > 11),]
-X[(X$var1 <= 3 | X$var3 > 15),]
+x <- data.frame("var1"=sample(1:5),"var2"=sample(6:10),"var3"=sample(11:15))
+x
+x <- x[sample(1:5),]; x$var2[c(1,3)] = NA
+x
+
+# first col - two ways  
+x[, 1]  
+x[,"var1"]
+
+x[1:2,"var2"]  # values(1,"var2") & values(2, "var2")
+
+# subset by conditions
+x[(x$var1 <= 3 & x$var3 > 11),]
+x[(x$var1 <= 3 | x$var3 > 15),]
+
 # dealing with missing data
-X[which(X$var2 > 8),]
+x[x$var2 > 8, ]
+x[which(x$var2 > 8), ]
 
-## sorting 
-sort(X$var1)
-sort(X$var1,decreasing=TRUE)
-sort(X$var2,na.last=TRUE)
+## sorting - value of a variable
+sort(x$var1); 
+sort(x$var1,decreasing=TRUE)
+sort(x$var2,na.last=TRUE)
 
-## ordering
-X[order(X$var1),]
-X[order(X$var1,X$var3),]
+## ordering - change dataframe 
+x <- x[order(x$var1),]; x 
+x[order(x$var1,x$var3),]
 
-# ordering with plyr
+# ordering with plyr - using arrange
 library(plyr)
-arrange(X,var1)
-arrange(X,desc(var1))
+arrange(x,var1)
+arrange(x,desc(var1))
 
 # add columns 
-X$var4 <- rnorm(5)
-X
-Y <- cbind(X,rnorm(5))
-Y
+x$var4 <- rnorm(5)
+x
+y <- cbind(x, var5 = rnorm(5))
+y
 
 
 ##### summarizing data 
@@ -367,8 +380,9 @@ any(is.na(restData$councilDistrict))
 all(restData$zipCode > 0)
 
 # row and column sums 
-colSums(is.na(restData))
+colSums(is.na(restData))  # sum of logical value(0 | 1) in each column
 all(colSums(is.na(restData)) == 0)
+
 
 # values with specific characteristics 
 table(restData$zipCode %in% c("21212"))
@@ -379,10 +393,12 @@ restData[restData$zipCode %in% c("21212", "21213"), ]
 
 #cross tabs 
 data("UCBAdmissions")
-DF = as.data.frame(UCBAdmissions)
-head(DF)
-summary(DF)
-xt <- xtabs(Freq ~ Gender + Admit, data = DF)
+df = as.data.frame(UCBAdmissions)
+head(df, n = 10)
+summary(df)
+dim(df)
+df
+xt <- xtabs(Freq ~ Gender + Admit, data = DF) # statistic on Gender * Admit
 xt
 
 warpbreaks$replicate <- rep(1:9, len = 54)
@@ -393,10 +409,11 @@ xt
 ftable(xt)
 
 # size of a data set 
-fakeData = rnorm(1e5)
+fakeData = rnorm(1e7)
+# write.csv(fakeData, "./data/fakedata.csv")
 object.size(fakeData)
 print(object.size(fakeData), units = "Mb")
-
+length(fakeData)
 
 ##### create new variables 
 # getting the data from the web
@@ -422,6 +439,7 @@ table(restData$zipWrong,restData$zipCode < 0)
 restData$zipGroups = cut(restData$zipCode, breaks=quantile(restData$zipCode))
 table(restData$zipGroups)
 
+#install.packages("Hmisc")
 library(Hmisc)
 restData$zipGroups = cut2(restData$zipCode,g=4)
 table(restData$zipGroups)
@@ -588,6 +606,23 @@ dfList = list(df1,df2,df3)
 join_all(dfList)
 
 
+########## SWIRL ##########
+by_package <- group_by(cran, package)
+pack_sum <- summarize(by_package,
+                      count = n(),
+                      unique = n_distinct(ip_id),
+                      countries = n_distinct(country),
+                      avg_bytes = mean(size))
+
+# Here's the new bit, but using the same approach we've
+# been using this whole time.
+
+top_countries <- filter(pack_sum, countries > 60)
+result1 <- arrange(top_countries, desc(countries), avg_bytes)
+
+# Print the results to the console.
+print(result1)
+
 
 #################### WEEK 4 ####################
 ########## LESSONS ##########
@@ -641,3 +676,10 @@ ymd_hms("2011-08-03 10:15:03", tz = "Pacific/Auckland")
 ##### data resources 
 
 
+
+########## QUIZ ########## 
+
+com <- read.csv("./data/hi.csv")
+head(com)
+a <- strsplit(names(com), "wgtp")
+a[123]
