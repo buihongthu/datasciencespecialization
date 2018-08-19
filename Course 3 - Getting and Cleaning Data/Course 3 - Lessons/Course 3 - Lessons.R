@@ -523,7 +523,7 @@ spraySums <- ddply(InsectSprays,.(spray),summarize,sum=ave(count,FUN=sum))
 dim(spraySums)
 
 
-##### managing data frames with dplyr
+##### managing data frames with dplyr (*)
 # arrange, filter, select, mutate, rename, summary
 install.packages("dplyr")
 library(dplyr)
@@ -544,17 +544,17 @@ head(chic.f)
 chic.f <- filter(chicago, pm25tmean2 > 30 & tmpd > 80)
 head(chic.f)
 
-# arrange: order 
+# arrange -  sorting
 chicago <- arrange(chicago, date)
 head(chicago)
 tail(chicago)
 chicago <- arrange(chicago, desc(date))
 
-# rename
+# rename - rename the variables 
 chicago <- rename(chicago, pm25 = pm25tmean2, dewpoint = dptp)
 names(chicago)
 
-# mutate
+# mutate - create new variables 
 chicago <- mutate(chicago, pm25detrend = pm25 - mean(pm25, na.rm = TRUE))
 head(select(chicago, pm25, pm25detrend))
 chicago <- mutate(chicago, tempcat = factor(1 * (tmpd > 80), labels = c("cold", "hot")))
