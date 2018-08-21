@@ -13,12 +13,15 @@ x <- rnorm(100)
 mean(x)
 ```
 
+
+
 ```{r computetime, echo = FALSE}
 time <- format(Sys.time(), "%a %b %d %X %Y")
 rand <- rnorm(1)
 ```
-
 The current time is `r time`. My favorite random number is `r rand`. 
+
+
 
 Let's first simulate some data. 
 ``` {r simulatedata, echo = TRUE}
@@ -30,4 +33,37 @@ Here is a scatterplot of the data
 par(mar = c(5,4,1,1), las = 1)
 plot(x, y, main = "My simulated data")
 ```
+
+
+
+Regression model
+```{r fitmodel}
+library(datasets)
+data(airquality)
+fit <- lm(Ozone ~ Wind + Temp + Solar.R, data = airquality)
+```
+Here is a table of regression coefficients
+```{r showtable, results = "asis"}
+library(xtable)
+xt <- xtable(summary(fit))
+print(xt, type = "html")
+```
+
+
+Setting global options
+```{r setoptions, echo = FALSE}
+library(knitr)
+opts_chunk$set(echo = FALSE, results = "hide")
+```
+
+First simualate data 
+```{r simulatedata1, echo = TRUE}
+x <- rnorm(100); y <- x + rnorm(100, sd = 0.5)
+```
+Here is a scatterplot of the data, again
+```{r scatterplot1, fig.height = 4}
+par(mar = c(5,4,1,1), las = 1)
+plot(x, y, main = "My simulated data")
+```
+
 

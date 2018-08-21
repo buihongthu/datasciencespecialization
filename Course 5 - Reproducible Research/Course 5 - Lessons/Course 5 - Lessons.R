@@ -103,6 +103,13 @@ table(predictedSpam, testSpam$type)
 
 
 
+#################### WEEK 2 ####################
+########## LESSONS ##########
+#install.packages("xtable")
+
+
+
+
 #################### WEEK 3 ####################
 ########## LESSONS ##########
 
