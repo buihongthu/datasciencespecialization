@@ -2,8 +2,8 @@
 table(dataset$field)  # categorial statistics
 dim(dataset)  # dimensions of dataframe 
 range(dataset$field) # give min and max
-head(select(chicago, city:dptp))  # select variables to show 
-
+head(select(chicago, city:dptp))  # select variables to show heads 
+str(spam[, 1:5])  # values and datatype of variable 1 to variable 5
 
 # subsetting 
 may <- subset(airquality, Month == 5)
