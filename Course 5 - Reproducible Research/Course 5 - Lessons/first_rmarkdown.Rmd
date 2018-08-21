@@ -1,4 +1,4 @@
-# My first knitr documetn 
+# My first knitr document 
 B.H.Thu  
 
 # Introduction
