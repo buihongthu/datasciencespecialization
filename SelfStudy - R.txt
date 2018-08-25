@@ -12,6 +12,8 @@ may <- subset(airquality, Month == 5)
 melt(allData, id = c("subject", "activity"))  # keep variables subject and activity, all of other variable and their values transfer to only two new variables (variable, value) 
 dcast(allData.melted, subject + activity ~ variable, mean)  # group subject + activity + variable, mean of value of variable
 
+
+
 ##### base plotting system 
 names(par())
 par()$pin 

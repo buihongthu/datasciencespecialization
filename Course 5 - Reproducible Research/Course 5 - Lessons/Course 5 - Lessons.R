@@ -114,3 +114,11 @@ table(predictedSpam, testSpam$type)
 ########## LESSONS ##########
 
 ##### evidence-based data analysis 
+
+
+
+
+
+#################### WEEK 4 ####################
+########## LESSONS ##########
+# human readable <> machine readable 

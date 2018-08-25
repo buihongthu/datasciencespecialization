@@ -6,7 +6,7 @@ B.H.Thu
 ### Introduction
 #### Introduction
 
-This is some text (i.e. a "text chunk"). Here is a code chunk 
+Here is the simulation of the code. Here is a code chunk 
 ```{r simulation, echo = TRUE, results = "hide"}
 set.seed(1)
 x <- rnorm(100)
@@ -65,5 +65,4 @@ Here is a scatterplot of the data, again
 par(mar = c(5,4,1,1), las = 1)
 plot(x, y, main = "My simulated data")
 ```
-
 
