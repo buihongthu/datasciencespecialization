@@ -1,33 +1,34 @@
-##### datasets 
+########## datasets 
 table(dataset$field)  # categorial statistics
 dim(dataset)  # dimensions of dataframe 
 range(dataset$field) # give min and max
 head(select(chicago, city:dptp))  # select variables to show heads 
+head(dt[order(dt$pac, decreasing = T), ], 10)  # top 10 pac
 str(spam[, 1:5])  # values and datatype of variable 1 to variable 5
 
-# subsetting 
+### subsetting 
 may <- subset(airquality, Month == 5)
 
-# processing dataset 
+### processing dataset 
 melt(allData, id = c("subject", "activity"))  # keep variables subject and activity, all of other variable and their values transfer to only two new variables (variable, value) 
 dcast(allData.melted, subject + activity ~ variable, mean)  # group subject + activity + variable, mean of value of variable
 
 
 
-##### base plotting system 
+########## base plotting system 
 names(par())
 par()$pin 
 par("lty")
 
-# can add text, title, points, lines to an existing plot
+### can add text, title, points, lines to an existing plot
 
-# boxplot
+### boxplot
 boxplot(Ozone~Month, airquality, xlab="Month", ylab="Ozone (ppb)",col.axis="blue",col.lab="red")
 title (main = "Ozone and Wind in New York City")
 
-# scatterplot
+### scatterplot
 with(airquality, plot(Wind, Ozone))
 
 
 
-##### ggplot2 
+########## ggplot2 
