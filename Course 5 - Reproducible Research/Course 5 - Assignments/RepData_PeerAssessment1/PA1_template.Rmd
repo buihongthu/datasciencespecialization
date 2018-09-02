@@ -16,6 +16,7 @@ library(ggplot2)
 ```
 
 Load the data 
+
 ```{r loaddata, echo = TRUE}
 df <- read.csv("activity.csv", header = TRUE, sep = ",")
 ```

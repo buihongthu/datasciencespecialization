@@ -18,6 +18,10 @@ library(ggplot2)
 
 Load the data 
 
+* ab
+* cd 
+
+
 ```r
 df <- read.csv("activity.csv", header = TRUE, sep = ",")
 ```
