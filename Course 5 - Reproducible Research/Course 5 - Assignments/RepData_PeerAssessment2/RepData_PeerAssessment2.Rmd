@@ -1,0 +1,176 @@
+---
+title: "Impact of Weather Events on Health and the Economy in the US"
+output:
+  html_document: default
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Synopsis
+When looking inside the impact of weather event to the population health, we can see that tornadoes was the most dangerous weather event causing almosts of fatalities and injuries for people. Secondly, the study is on the impact of weather events to the US's economy both in terms of property and crop damages. The result is that flash floods and thunderstorm winds caused billions of dollars in property damages, while drought flood caused the largest crop damages. 
+
+&nbsp;
+
+## Data Processing
+
+The data is the records of weather events and their impacts, started from 1950 to 2011. Because the data is in a form of a csv file compressed by bzip2 alagorithm, the first step is read it into a dataframe. Because the size of the file is big, we just read what we need for the analysis.
+```{r loaddata, echo = TRUE}
+dt <- read.csv(bzfile("repdata%2Fdata%2FStormData.csv.bz2"))[,c(8,23,24,25,26,27,28)]
+```
+
+Load libraries to prepare for the analysis. 
+```{r loadlibraries, echo = TRUE, warning = FALSE, message = FALSE}
+library(plyr)
+library(dplyr)
+library(data.table)
+library(ggplot2)
+```
+
+&nbsp;
+
+## Data transformations for cleaning up
+Among the collected data, event types are free text and do not have predefined types. Because of that, before doing the analysis, we need to clean up data. 
+Number of original values:
+```{r originalvalues, echo = TRUE}
+length(unique(toupper(dt$EVTYPE)))
+```
+The data is cleaned up as
+
+* special characters, 
+* digits, 
+* removed spaces before the end
+* removed spaces at the beginning
+* removed multiple spaces at the middle
+* assign unclassified for non value 
+
+```{r cleanupdata, echo = TRUE}
+event.type <- toupper(dt$EVTYPE)
+event.type <- gsub("[[:punct:]]", " ", event.type)
+event.type <- gsub("\\d", "", event.type)
+event.type <- gsub(" *$", "", event.type)
+event.type <- gsub("^ *", "", event.type)
+event.type <- gsub("  *", " ", event.type)
+event.type[which(event.type == "")] <- "UNCLASSIFIED"
+# update the data frame
+dt$EVTYPE <- event.type
+```
+Number of values after cleaning up
+```{r modifiedvalue, echo = TRUE}
+length(unique(dt$EVTYPE))
+```
+
+&nbsp;
+
+## Types of events that are most harmful to Population Health
+Aggregate the fatalities and injuries by event types 
+```{r fatalandinjuries, echo = TRUE}
+group.event <- group_by(dt, EVTYPE)
+group.event.sum <- summarize(group.event, fats = sum(FATALITIES, na.rm = TRUE), 
+                             injs = sum(INJURIES, na.rum = TRUE))
+```
+
+Find top 10 events causes highest fatalities 
+```{r fatalities, echo = TRUE}
+top.fats <- head(group.event.sum[order(group.event.sum$fats, decreasing = T), ], 10)
+
+g <- ggplot(data = top.fats, aes(reorder(EVTYPE, fats), fats))
+g + geom_bar(stat = "identity", color = "black") + 
+   coord_flip() + 
+   labs(y="Fatalities", x="Events", 
+        title="Top 10 Weather Events Cause Highest Fatalities", caption = "Source: ...") + 
+   scale_y_continuous(breaks = seq(0, 6000, by = 1000))
+```
+
+Find top 10 events causes highest injuries
+```{r injuries, echo = TRUE}
+top.injs <- head(group.event.sum[order(group.event.sum$injs, decreasing = T), ], 10 )
+
+g <- ggplot(data = top.injs, aes(reorder(EVTYPE, injs), injs))
+g + geom_bar(stat="identity", color = "black") + 
+   coord_flip() + 
+   labs(y="Injuries", x="Events", 
+        title="Top 10 Weather Events Cause Highest Injuries", caption = "Source: ...") + 
+   scale_y_continuous(breaks = seq(0, 100000, by = 10000))
+
+```
+
+&nbsp;
+
+## Types of events that have the greatest Economic consequences
+There are 2 types of impacts on the economy, property damage and crop damage. The property damage is represented in two variables, PROPDMG in dollars and PROPDMGEXP as the exponent. Likewise, the crop damage are on CROPDMG and CROPDMGEXP.
+First we need to re-calculate these damages.
+```{r damagesvalue, echo = TRUE}
+# a function for unit
+unit.tfm <- function(u) {
+   if (u %in% c('h', 'H'))
+      return(2)
+   else if (u %in% c('k', 'K'))
+      return(3)
+   else if (u %in% c('m', 'M'))
+      return(6)
+   else if (u %in% c('b', 'B'))
+      return(9)
+   else if (!is.na(as.numeric(u)))
+      return(as.numeric(u))
+   else if (u %in% c('', '-', '?', '+'))
+      return(0)
+   else {
+      stop("Invalid value")
+   }
+}
+# create 2 new variables on damages
+dt <- mutate(dt, PROPDMGCOST = dt$PROPDMG * (10 ** sapply(dt$PROPDMGEXP, unit.tfm)))
+dt <- mutate(dt, CROPDMGCOST = dt$CROPDMG * (10 ** sapply(dt$CROPDMGEXP, unit.tfm)))
+```
+
+
+Aggregate the property damage, crop damage, and both by event types 
+```{r economiclosses, echo = TRUE}
+# Compute the economic loss by event type
+group.event <- group_by(dt, EVTYPE)
+group.event.eco <- summarize(group.event, ppt = sum(PROPDMGCOST, na.rm = TRUE), 
+                             crp = sum(CROPDMGCOST, na.rm = TRUE), 
+                             pac = sum(PROPDMGCOST + CROPDMGCOST), na.rm = TRUE)
+```
+
+Top 10 events cause highest property damage
+```{r property, echo = TRUE}
+top.ppt <- head(group.event.eco[order(group.event.eco$ppt, decreasing = T), ], 10)
+g <- ggplot(data = top.ppt, aes(reorder(EVTYPE, ppt), ppt/10^9))
+g + geom_bar(stat="identity", color = "black") + 
+   coord_flip() + 
+   labs(y="Property Damages", x="Events", 
+        title="Top 10 Weather Events Cause Highest Property Damages (in billions)") +
+   scale_y_continuous(breaks = seq(0, 70000, by = 10000))
+
+```
+
+Top 10 events cause highest crop damage
+```{r crop, echo = TRUE}
+top.crp <- head(group.event.eco[order(group.event.eco$crp, decreasing = T), ], 10)
+g <- ggplot(data = top.crp, aes(reorder(EVTYPE, crp), crp/10^9))
+g + geom_bar(stat="identity", color = "black") + 
+   coord_flip() + 
+   labs(y="Crop Damages", x="Events", 
+        title="Top 10 Weather Events Cause Highest Crop Damages (in billions)") +
+   scale_y_continuous(breaks = seq(0, 15, by = 2))
+```
+
+Top 10 events cause highest damage in terms of property and crop  
+```{r both, echo = TRUE}
+top.pac <- head(group.event.eco[order(group.event.eco$pac, decreasing = T), ], 10)
+g <- ggplot(data = top.pac, aes(reorder(EVTYPE, pac), pac/10^9))
+g + geom_bar(stat="identity", color = "black") + 
+   coord_flip() + 
+   labs(y="Total Damages", x="Events", 
+        title="Top 10 Weather Events Cause Highest Property & Crop Damages (in billions)") +
+   scale_y_continuous(breaks = seq(0, 70000, by = 10000))
+```
+&nbsp;
+
+## Results
+The analysis has brought to us that tonado and excessive heat have caused almost of fatalities by weather events; while winds and floods have damaged lot of property and crop of the US from 1950 to 2011.
