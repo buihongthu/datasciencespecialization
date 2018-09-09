@@ -398,7 +398,9 @@ class(t)
 ##### split: separate groups by second argument
 x <- c(rnorm(10), runif(10), rnorm(10,1))
 f <- gl(3,10)
-split(x,f)
+s <- split(x,f)
+s[1]; s[2]; s[3]
+class(s[1])
 
 # more than 1 level
 x <- rnorm(10)
@@ -438,8 +440,6 @@ tapply(iris$Sepal.Length, iris$Species, mean)
 sapply(split(mtcars$mpg, mtcars$cyl), mean)
 with(mtcars, tapply(mpg, cyl, mean))
 tapply(mtcars$mpg, mtcars$cyl, mean)
-
-
 tapply(mtcars$hp, mtcars$cyl,mean)
 
 

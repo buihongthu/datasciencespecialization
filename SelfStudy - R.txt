@@ -9,22 +9,35 @@ cameraData <- read.table("./data/cameras.csv", sep = ",", header = TRUE)     # r
 
 ******************************************* working with data & dataset 
 ***** investigate data
+object.size(data)     # return the size of the object
+names(data)     # return the variable name of the data frame
+summary(data)     # summarize data 
 table(dataset$field)      # categorial statistics
 dim(dataset)      # dimensions of dataframe 
 range(dataset$field)     # give min and max
 head(select(chicago, city:dptp))      # select variables to show heads 
 head(dt[order(dt$pac, decreasing = T), ], 10)      # top 10 pac
+tail(dataframe)
 str(spam[, 1:5])      # values and datatype of variable 1 to variable 5
+
 
 ***** subsetting 
 may <- subset(airquality, Month == 5)
+
 
 ***** processing dataset 
 melt(allData, id = c("subject", "activity"))      # keep variables subject and activity, all of other variable and their values transfer to only two new variables (variable, value) 
 dcast(allData.melted, subject + activity ~ variable, mean)      # group subject + activity + variable, mean of value of variable
 
+
 ***** create matrix 
 matrix(1:6, nrow = 2, ncol = 3)
+
+
+***** split by factors
+x <- c(rnorm(10), runif(10), rnorm(10,1))
+f <- gl(3,10)     # generate factor levels
+s <- split(x,f)
 
 
 
@@ -38,10 +51,12 @@ x <- list(a = 1:5, b = rnorm(100,1,1)) ;
 lapply(x, mean)     # return a list of means
 sapply(x, mean)     # return a vector of means    
 
+
 ***** apply
 * apply: quick statistic on row or col of a matrix  
 x <- matrix(rnorm(200), 20, 10)
 apply(x, 2, mean)      # 1 ~ row, 2 ~ column
+
 
 ***** tapply
 * tapply: apply function to each factor variable in a vector
@@ -55,24 +70,73 @@ t <- tapply(x, f, mean)
 
 
 ******************************************* base plotting system 
-names(par())
-par()$pin 
-par("lty")
+***** notes 
+* boxplot(), plot(), hist()
+* can add text, title, points, lines to an existing plot
 
-***** can add text, title, points, lines to an existing plot
+
+***** scatterplot
+* adding elements to the plot
+x <- rnorm(100)
+y <- rnorm(100)
+plot(x, y, pch = 20)
+title("Scatterplot")
+text(-2, -2, "Lable")
+
+* legend 
+legend("topleft", legend = "Data")
+legend("topleft", legend = "Data", pch = 20)
+
+* regression line 
+fit <- lm(y ~ x)
+abline(fit)
+abline(fit, lwd = 3)
+abline(fit, lwd = 3, col = "blue")
+
+* two graphs in a col
+z <- rpois(100, 2)
+par(mfrow = c(2, 1))
+plot(x, y, pch = 20)
+plot(x, z, pch = 19)
+par(mar = c(2, 2, 1, 1))
+plot(x, y, pch = 20)
+plot(x, z, pch = 19)
+
+* two graphs in a row
+par(mfrow = c(1, 2))
+plot(x, y, pch = 20)
+plot(x, z, pch = 19)
+
 
 ***** boxplot
 boxplot(Ozone~Month, airquality, xlab="Month", ylab="Ozone (ppb)",col.axis="blue",col.lab="red")
 title (main = "Ozone and Wind in New York City")
 
-***** scatterplot
-with(airquality, plot(Wind, Ozone))
 
+***** histogram 
+x <- rnorm(100)
+hist(x)
 
 
 
 
 ******************************************* ggplot2 
+***** quick plot
+* scatterplot
+qplot(displ, hwy, data = mpg, color = drv, geom = c("point", "smooth"))
+
+* box plot 
+qplot(drv, hwy, data = mpg, geom = "boxplot")
+
+* histogram
+qplot(hwy, data = mpg, fill = drv)
+
+
+***** full plot
+* geom_line, geom_point, facet_grid, geom_smooth, labs,  
+data.graph <- data.frame(x = 1:100, y = rnorm(100))
+g <- ggplot(data.graph, aes(x, y))
+g + geom_line() + ylim(-3, 3 ) 
 
 
 

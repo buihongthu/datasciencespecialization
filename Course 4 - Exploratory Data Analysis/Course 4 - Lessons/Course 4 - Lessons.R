@@ -71,6 +71,7 @@ with(airquality, plot(Wind, Ozone, main = "Ozone and Wind in the New York city",
 model <- lm(Ozone ~ Wind, airquality)
 abline(model, lwd = 2)
 
+
 # multiple base plots
 par(mfrow = c(1,2))  # 
 with(airquality, {
@@ -288,10 +289,10 @@ g + geom_point(aes(color = bmicat)) + theme_bw(base_family = "Times")
 
 
 # axis limit 
-testdat <- data.frame(x = 1:100, y = rnorm(100))
-testdat[50, 2] <- 100
-plot(testdat$x, testdat$y, type = "l", ylim = c(-3,3))
-g <- ggplot(testdat, aes(x = x, y = y))
+data.graph <- data.frame(x = 1:100, y = rnorm(100))
+data.graph[50, 2] <- 100
+plot(data.graph$x, data.graph$y, type = "l", ylim = c(-3,3))
+g <- ggplot(data.graph, aes(x, y))
 g + geom_line() + ylim(-3, 3 )  # remove the outlier
 g + geom_line() + coord_cartesian(ylim = c(-3, 3))  # include the outlier
 
