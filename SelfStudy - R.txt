@@ -1,3 +1,11 @@
+******************************************* download & read data 
+fileURL <- "https://data.baltimorecity.gov/api/views/dz54-2aru/rows.csv?accesstype=DOWNLOAD"
+download.file(fileURL, destfile = "./data/cameras.csv", method = "curl")
+cameraData <- read.table("./data/cameras.csv", sep = ",", header = TRUE)
+
+
+
+
 ******************************************* working with data & dataset 
 table(dataset$field)  # categorial statistics
 dim(dataset)  # dimensions of dataframe 
@@ -10,8 +18,13 @@ str(spam[, 1:5])  # values and datatype of variable 1 to variable 5
 may <- subset(airquality, Month == 5)
 
 ### processing dataset 
-melt(allData, id = c("subject", "activity"))  # keep variables subject and activity, all of other variable and their values transfer to only two new variables (variable, value) 
-dcast(allData.melted, subject + activity ~ variable, mean)  # group subject + activity + variable, mean of value of variable
+
+# keep variables subject and activity, all of other variable and their values transfer to only two new variables (variable, value) 
+melt(allData, id = c("subject", "activity"))  
+
+# group subject + activity + variable, mean of value of variable
+dcast(allData.melted, subject + activity ~ variable, mean)  
+
 
 
 
@@ -32,6 +45,8 @@ with(airquality, plot(Wind, Ozone))
 
 
 ******************************************* ggplot2 
+
+
 
 
 
