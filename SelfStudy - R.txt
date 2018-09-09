@@ -1,4 +1,4 @@
-########## datasets 
+******************************************* working with data & dataset 
 table(dataset$field)  # categorial statistics
 dim(dataset)  # dimensions of dataframe 
 range(dataset$field) # give min and max
@@ -15,7 +15,7 @@ dcast(allData.melted, subject + activity ~ variable, mean)  # group subject + ac
 
 
 
-########## base plotting system 
+******************************************* base plotting system 
 names(par())
 par()$pin 
 par("lty")
@@ -31,7 +31,9 @@ with(airquality, plot(Wind, Ozone))
 
 
 
-########## ggplot2 
+******************************************* ggplot2 
 
 
-########## statistics 
+
+
+******************************************* statistics 
