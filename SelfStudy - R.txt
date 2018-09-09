@@ -32,3 +32,6 @@ with(airquality, plot(Wind, Ozone))
 
 
 ########## ggplot2 
+
+
+########## statistics 
