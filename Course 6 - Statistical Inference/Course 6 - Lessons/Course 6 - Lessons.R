@@ -126,3 +126,14 @@ g
 
 
 ##### permutation test 
+
+
+
+##### QUIZ 
+# question 2
+n <- 9
+?? <- 1100
+?? <- 30
+quantile = 0.975 # is 95% with 2.5% on both sides of the range
+confidenceInterval = ?? + c(-1, 1) * qt(quantile, df=n-1) * ?? / sqrt(n)
+confidenceInterval

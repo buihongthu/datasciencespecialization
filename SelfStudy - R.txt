@@ -1,29 +1,55 @@
 ******************************************* download & read data 
-fileURL <- "https://data.baltimorecity.gov/api/views/dz54-2aru/rows.csv?accesstype=DOWNLOAD"
-download.file(fileURL, destfile = "./data/cameras.csv", method = "curl")
-cameraData <- read.table("./data/cameras.csv", sep = ",", header = TRUE)
+fileURL <- "https://data.baltimorecity.gov/api/views/dz54-2aru/rows.csv?accesstype=DOWNLOAD"     # set the url 
+download.file(fileURL, destfile = "./data/cameras.csv", method = "curl")     # download file 
+cameraData <- read.table("./data/cameras.csv", sep = ",", header = TRUE)     # read data to dataframe
+
 
 
 
 
 ******************************************* working with data & dataset 
-table(dataset$field)  # categorial statistics
-dim(dataset)  # dimensions of dataframe 
-range(dataset$field) # give min and max
-head(select(chicago, city:dptp))  # select variables to show heads 
-head(dt[order(dt$pac, decreasing = T), ], 10)  # top 10 pac
-str(spam[, 1:5])  # values and datatype of variable 1 to variable 5
+***** investigate data
+table(dataset$field)      # categorial statistics
+dim(dataset)      # dimensions of dataframe 
+range(dataset$field)     # give min and max
+head(select(chicago, city:dptp))      # select variables to show heads 
+head(dt[order(dt$pac, decreasing = T), ], 10)      # top 10 pac
+str(spam[, 1:5])      # values and datatype of variable 1 to variable 5
 
-### subsetting 
+***** subsetting 
 may <- subset(airquality, Month == 5)
 
-### processing dataset 
+***** processing dataset 
+melt(allData, id = c("subject", "activity"))      # keep variables subject and activity, all of other variable and their values transfer to only two new variables (variable, value) 
+dcast(allData.melted, subject + activity ~ variable, mean)      # group subject + activity + variable, mean of value of variable
 
-# keep variables subject and activity, all of other variable and their values transfer to only two new variables (variable, value) 
-melt(allData, id = c("subject", "activity"))  
+***** create matrix 
+matrix(1:6, nrow = 2, ncol = 3)
 
-# group subject + activity + variable, mean of value of variable
-dcast(allData.melted, subject + activity ~ variable, mean)  
+
+
+
+
+******************************************* apply functions 
+***** lapply & sapply
+* lapply: apply a given function to every element of a list
+* sapply: same with sapply but simplify the results
+x <- list(a = 1:5, b = rnorm(100,1,1)) ; 
+lapply(x, mean)     # return a list of means
+sapply(x, mean)     # return a vector of means    
+
+***** apply
+* apply: quick statistic on row or col of a matrix  
+x <- matrix(rnorm(200), 20, 10)
+apply(x, 2, mean)      # 1 ~ row, 2 ~ column
+
+***** tapply
+* tapply: apply function to each factor variable in a vector
+tapply(x, factors, fun)    # x ~ object, factors ~ a list of factors. 
+x <- c(rnorm(10), runif(10), rnorm(10,1))     # runif(r-unif) ~ generate random values of the uniform distribution
+f <- gl(3, 10)     # generate factor levels
+t <- tapply(x, f, mean)
+
 
 
 
@@ -33,14 +59,16 @@ names(par())
 par()$pin 
 par("lty")
 
-### can add text, title, points, lines to an existing plot
+***** can add text, title, points, lines to an existing plot
 
-### boxplot
+***** boxplot
 boxplot(Ozone~Month, airquality, xlab="Month", ylab="Ozone (ppb)",col.axis="blue",col.lab="red")
 title (main = "Ozone and Wind in New York City")
 
-### scatterplot
+***** scatterplot
 with(airquality, plot(Wind, Ozone))
+
+
 
 
 
@@ -52,3 +80,19 @@ with(airquality, plot(Wind, Ozone))
 
 
 ******************************************* statistics 
+***** normal distribution
+rnorm(n, mean = 0, sd = 1)     # generate random values in the normal distribution
+pnorm(q, mean = 0, sd = 1, lower.tail = TRUE)     # distribution function of the normal distribution
+qnorm(p, mean = 0, sd = 1, lower.tail = TRUE)     # quantile function of the normal distribution 
+
+
+
+
+
+******************************************* others 
+***** customized function 
+myfunction <- function() {
+   x <- rnorm(100)
+   mean(x)
+}
+

@@ -388,10 +388,11 @@ list(noise(1,1,2), noise(2,2,2), noise(3,3,2), noise(4,4,2), noise(5,5,2))
 
 
 ##### tapply: function on group
-x <- c(rnorm(10), runif(10), rnorm(10,1))
+x <- c(rnorm(10), runif(10), rnorm(10,1))     # runif(r-unif) ~ generate  
 f <- gl(3,10)
-tapply(x,f,mean)
+t <- tapply(x,f,mean)
 tapply(x,f,range)
+class(t)
 
 
 ##### split: separate groups by second argument
